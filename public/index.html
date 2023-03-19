@@ -1,1 +1,97 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/addons/p5.dom.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/addons/p5.sound.min.js"></script>
+ 
+
+  <script src="mappa.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <meta charset="utf-8" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,500;0,700;1,500;1,600&display=swap"
+    rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header__msg">
+      <span>YOU ARE NOT HERE</span>
+    </div>
+    <button class="btn btn--transparent header__msg" id="add-a-Pin">
+      ADD A PIN
+    </button>
+  </header>
+
+
+
+  <!-- Instructions Modal -->
+  <div class="modal instructionsModal hidden">
+    <button class="close-modal closeInstructionsModal">&times;</button>
+    <ol type="I" class="instructions_text">
+      <li>Think of a place you know that is not sufficiently represented on the map</li>
+      <li>Navigate to this place</li>
+      <li>Drop a pin by clicking on the map</li>
+      <li>Explore other unmapped locations</li>
+      <li>Invite your friends</li>
+    </ol>
+  </div>  
+
+
+
+  <!-- MODAL/UI ADD PIN WINDOW -->
+
+  <div class="modal hidden addPinModal">
+    <button class="close-modal closePinModal">&times;</button>
+    
+
+    <!-- Form -->
+    <form class="form" method="POST" action="/">
+      <h1 class="form_title">
+        Add a Pin
+      </h1>
+      <!-- https://www.geeksforgeeks.org/how-to-change-the-text-of-a-label-using-javascript/ -->
+      <div class="form__group form__loc-coordinates">
+        <label for="loc-coordinates" id="placeholder">Placeholder for coordinates</label>
+        <!-- previously: form__task-name and for: task-name -->
+        <!-- no need for input here -->
+      </div>
+      <div class="form__group ">
+        <label for="unmapped"><span class="form__unmapped">unmapped</span></label>
+      </div>
+      <div class="form_group form__loc-name">
+        <!-- previously: form__status or form__task-name -->
+        <label for="loc-name">Title</label>
+        <!-- previously: for: task-name -->
+        <input type="text" class="form__control" id="loc-name" />
+      </div>
+      <div class="form__group form__description text--italic text--medium">
+        <label for="location-description">
+          What is this place? Why isn’t it on the map? Write a sentence, poem, story, or whatever you want.
+        </label>
+        <textarea class="form__control" id="loc-description" rows="7" cols="65">
+        </textarea>
+      </div>
+      <div class="form__btn-group">
+        <button class="btn btn--basic form__add">Create</button>
+        <button class="btn btn--danger form__cancel">Cancel</button>
+      </div>
+    </form>
+
+
+
+
+
+
+
+
+</body>
+<script src="sketch.js"></script>
+
+</html>

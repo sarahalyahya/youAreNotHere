@@ -36,6 +36,3 @@ app.post("/ajax_response",function(req,res){
     // console.log(data);
 
 })
-
-
-

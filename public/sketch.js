@@ -80,6 +80,19 @@ function createPin() {
 }
 } 
 
+// function forPostReq(currentPin){
+//   let pin = currentPin; 
+//   console.log(JSON.stringify(pin));
+//   $(document).ready(function(){
+//     $(".form__add").click(function(){
+//       $.post("/ajax_response",pin,function(data,status){
+//         alert("Data: " + data + "\nStatus:" + status);
+//       });
+//     });
+//     console.log("and here");
+//   });
+// }
+
 //empties previous form values
 const resetForm = () => {
   locationName.value = "";
@@ -134,6 +147,16 @@ createLocation.addEventListener("click", (e) => {
   currentPinsArrayLength = pins.length;
   e.preventDefault();
   createPin();
+  pin = pins[pins.length-1];
+  function forPostReq(pin){
+    let thisPin = pin; 
+    console.log("i am here");
+      $.post("/ajax_response",thisPin,function(data,status){
+        alert("Data: " + data + "\nStatus:" + status);
+      });
+    };
+  forPostReq(pin);
+
   if (pins.length > currentPinsArrayLength) {
     closePinModalHandler(e);
   }
@@ -156,7 +179,6 @@ class Pin {
 
 //Pin Object Array
 let pins = [];
-module.exports = pins;
 
 
 

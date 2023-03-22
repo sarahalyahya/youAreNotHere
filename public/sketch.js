@@ -1,11 +1,10 @@
-
-
+//Pin Object Array
+let pins = [];
+//pin csv table
 let allPinsTable;
-
-//preload
-// function preload() {
-//   //allPinsTable = loadTable("../Pins.csv", "csv", "header");
-// }
+let imageRatio = 0.729;
+let pinHeight = 35;
+let pinWidth = pinHeight * imageRatio;
 
 const key =
   "pk.eyJ1Ijoic2FyYWhhbHlhaHlhIiwiYSI6ImNsY3JjZGo3eDBlbmozeG1zbWV5enF3NHEifQ.riUptbqKaET6RE6XJ8usvg";
@@ -26,8 +25,26 @@ let myMap;
 let canvas;
 let phrases;
 
+//preload
+function preload() {
+  allPinsTable = loadTable(
+    "Pins.csv",
+    "csv",
+    "header",
+    // Callback:
+    function (table) {
+      loaded = true;
+      console.log(loaded);
+    }
+  );
+  redPin = loadImage("redNavFull.png");
+  blackPin = loadImage("blackNavFull.png");
+}
+
 function setup() {
-  canvas = createCanvas(1920, 1080);
+  pins = allPinsTable.getArray();
+
+  canvas = createCanvas(1710, 1276);
 
   myMap = mappa.tileMap(options);
   myMap.overlay(canvas);
@@ -41,9 +58,11 @@ function setup() {
 // Grabbing HTML elements
 const addPinModal = document.querySelector(".addPinModal");
 const instructionsModal = document.querySelector(".instructionsModal");
-const showInstructionsBtn = document.getElementById("add-a-Pin")
+const showInstructionsBtn = document.getElementById("add-a-Pin");
 const closePinModalBtn = document.querySelector(".closePinModal");
-const closeInstructionsModalBtn = document.querySelector(".closeInstructionsModal");
+const closeInstructionsModalBtn = document.querySelector(
+  ".closeInstructionsModal"
+);
 const cancelLocationAdd = document.querySelector(".form__cancel");
 const createLocation = document.querySelector(".form__add");
 const locationName = document.getElementById("loc-name");
@@ -68,29 +87,22 @@ function createPin() {
     alert("You must enter either a location name or description");
   } else {
     let currentPin = new Pin(
+      0,
+      0,
       position[0],
       position[1],
       locationNameEdited,
       locationDescriptionEdited,
       pins.length + 1
     );
-    
-    pins.push(currentPin);
-   
-}
-} 
 
-// function forPostReq(currentPin){
-//   let pin = currentPin; 
-//   console.log(JSON.stringify(pin));
-//   $(document).ready(function(){
-//     $(".form__add").click(function(){
-//       $.post("/ajax_response",pin,function(data,status){
-//         alert("Data: " + data + "\nStatus:" + status);
-//       });
-//     });
-//     console.log("and here");
-//   });
+    pins.push(currentPin);
+  }
+}
+
+// function displayPin() {
+//   let index = pins.length - 1;
+//   console.log(pins[index]);
 // }
 
 //empties previous form values
@@ -99,7 +111,7 @@ const resetForm = () => {
   locationDescription.value = "";
 };
 
-//Modal Functionalities 
+//Modal Functionalities
 
 //display and close pin modal
 const togglePinModal = (action) => {
@@ -110,8 +122,6 @@ const togglePinModal = (action) => {
   }
 };
 
-
-
 //calls all needed functions to close modal
 const closePinModalHandler = (e) => {
   //default brings back map to Tantura home
@@ -119,8 +129,6 @@ const closePinModalHandler = (e) => {
   resetForm();
   togglePinModal("closeModal");
 };
-
-
 
 //Event Listeners
 closePinModalBtn.addEventListener("click", (e) => {
@@ -130,14 +138,12 @@ closePinModalBtn.addEventListener("click", (e) => {
 showInstructionsBtn.addEventListener("click", (e) => {
   e.preventDefault();
   instructionsModal.classList.remove("hidden");
-})
+});
 
 closeInstructionsModalBtn.addEventListener("click", (e) => {
   e.preventDefault();
   instructionsModal.classList.add("hidden");
 });
-
-
 
 cancelLocationAdd.addEventListener("click", (e) => {
   closePinModalHandler(e);
@@ -147,14 +153,14 @@ createLocation.addEventListener("click", (e) => {
   currentPinsArrayLength = pins.length;
   e.preventDefault();
   createPin();
-  pin = pins[pins.length-1];
-  function forPostReq(pin){
-    let thisPin = pin; 
+  pin = pins[pins.length - 1];
+  function forPostReq(pin) {
+    let thisPin = pin;
     console.log("i am here");
-      $.post("/ajax_response",thisPin,function(data,status){
-        alert("Data: " + data + "\nStatus:" + status);
-      });
-    };
+    $.post("/ajax_response", thisPin, function (data, status) {
+      alert("Data: " + data + "\nStatus:" + status);
+    });
+  }
   forPostReq(pin);
 
   if (pins.length > currentPinsArrayLength) {
@@ -162,13 +168,11 @@ createLocation.addEventListener("click", (e) => {
   }
 });
 
-
-
-
-
 //Pin Class
 class Pin {
-  constructor(lat, lng, name, desc, id) {
+  constructor(_x, _y, lat, lng, name, desc, id) {
+    this.x = _x;
+    this.y = _y;
     this.latitude = lat;
     this.longitude = lng;
     this.locName = name;
@@ -177,12 +181,36 @@ class Pin {
   }
 }
 
-//Pin Object Array
-let pins = [];
-
-
-
-
 function draw() {
-  canvas.mouseClicked(addLocationOnMap);
+  let cols = ceil(canvas.width / pinWidth);
+  let rows = ceil(canvas.height / pinHeight);
+  //console.log(pins);
+  //let pins2D = [];
+  let pinCounter = 0;
+
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      pins[pinCounter][1] = i * (pinHeight + 15) + 20;
+      pins[pinCounter][0] = j * (pinWidth + 10) + 10;
+      if (pinCounter < pins.length - 1) {
+        pinCounter += 1;
+      }
+    }
+  }
+  let index = 0;
+  pins.forEach(function (pin) {
+    //button = createButton(pin[6]);
+    //button.addClass("btn--basic");
+    // button.addClass("btn--pin");
+    //button.position(pin[0],pin[1]);
+    image(redPin, pin[0], pin[1], pinWidth, pinHeight);
+  });
+
+  //image(redPin, mouseX, mouseY, pinWidth, pinHeight);
 }
+
+// clicked() {
+//   if (dist(mouseX, mouseY, this.x, this.y) < this.size) {
+//     background(255, 0, 0);
+//   }
+// }

@@ -6,14 +6,21 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/addons/p5.dom.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/addons/p5.sound.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://kit.fontawesome.com/b7ecf22d2d.js" crossorigin="anonymous"></script>
 
- 
 
   <script src="mappa.js"></script>
   <link rel="stylesheet" type="text/css" href="style.css">
   <meta charset="utf-8" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
+    integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,500;0,700;1,500;1,600&display=swap"
     rel="stylesheet">
 
@@ -24,6 +31,7 @@
   <!-- HEADER -->
   <header class="header">
     <div class="header__msg">
+      <i class="fa-solid fa-map-pin" style="color: #ffffff;"></i>
       <span>YOU ARE NOT HERE</span>
     </div>
     <button class="btn btn--transparent header__msg" id="add-a-Pin">
@@ -37,13 +45,13 @@
   <div class="modal instructionsModal hidden">
     <button class="close-modal closeInstructionsModal">&times;</button>
     <ol type="I" class="instructions_text">
-      <li>Think of a place you know that is not sufficiently represented on the map</li>
+      <li>Think of a place you know that is not well-represented on the map</li>
       <li>Navigate to this place</li>
       <li>Drop a pin by clicking on the map</li>
       <li>Explore other unmapped locations</li>
       <li>Invite your friends</li>
     </ol>
-  </div>  
+  </div>
 
 
 
@@ -51,10 +59,10 @@
 
   <div class="modal hidden addPinModal">
     <button class="close-modal closePinModal">&times;</button>
-    
+
 
     <!-- Form -->
-    <form class="form" >
+    <form class="form">
       <h1 class="form_title">
         Add a Pin
       </h1>
@@ -94,6 +102,6 @@
 
 
 </body>
-<script src="sketch.js"></script>
+<script src="sketch.js" defer></script>
 
 </html>

@@ -20,19 +20,24 @@ app.get("/", function(req,res){
 app.post("/ajax_response",function(req,res){
     console.log(req.body.latitude);
     if (!fs.existsSync("./public/Pins.csv"))
-        writer = csvWriter({ headers: ["latitude","longitude","locName","locDesc","id"]});
+        writer = csvWriter({ headers: ["x","y","latitude","longitude","locName","locDesc","id"]});
     else
         writer = csvWriter({sendHeaders: false});
     writer.pipe(fs.createWriteStream("./public/Pins.csv", {flags: 'a'}));
     writer.write({
-        header1:req.body.latitude,
-        header2:req.body.longitude,
-        header3:req.body.locName,
-        header4:req.body.locDesc,
-        header5:req.body.id,
+        header1:req.body.x,
+        header2:req.body.y,
+        header3:req.body.latitude,
+        header4:req.body.longitude,
+        header5:req.body.locName,
+        header6:req.body.locDesc,
+        header7:req.body.id,
     });
     writer.end();
     // res.json(data);
     // console.log(data);
 
 })
+
+
+

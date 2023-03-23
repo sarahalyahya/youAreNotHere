@@ -47,10 +47,23 @@
     <ol type="I" class="instructions_text">
       <li>Think of a place you know that is not well-represented on the map</li>
       <li>Navigate to this place</li>
-      <li>Drop a pin by clicking on the map</li>
+      <li>Drop a pin by double-clicking on the map</li>
       <li>Explore other unmapped locations</li>
       <li>Invite your friends</li>
     </ol>
+  </div>
+
+  <!-- LOCATION DISPLAY MODAL -->
+  <div class="locationModal hidden">
+    <button class="close-modal closeLocationModal">&times;</button>
+    <div class="locationModal__group locationModal__loc-coordinates"><label class="locationModal__label"
+        id="coord-placeholder-filled" for="loc-coordinates">Placeholder for coordinates</label></div>
+    <div class="locationModal__group"><label class="locationModal__label" for="unmapped"><span
+          class="form__unmapped">unmapped</span></label></div>
+    <div class="locationModal_group locationModal__loc-name"><label id="loc-name-filled" for="loc-name">Placeholder for Title</label></div>
+    <div class="locationModal_group locationModal__description"><span id="loc-description-filled">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque accumsan consequat nulla ac finibus. Integer sit amet commodo risus. Vivamus neque turpis, gravida sed condimentum eu, eleifend in arcu. Ut lacinia nibh eu libero condimentum tincidunt. Nullam blandit augue ac metus fringilla, quis condimentum ex fringilla. Ut aliquam quam sed dui consequat, vel cursus diam hendrerit. Orci varius natoque penatibus.
+
+    </span></div>
   </div>
 
 
@@ -66,19 +79,15 @@
       <h1 class="form_title">
         Add a Pin
       </h1>
-      <!-- https://www.geeksforgeeks.org/how-to-change-the-text-of-a-label-using-javascript/ -->
       <div class="form__group form__loc-coordinates">
         <label for="loc-coordinates" id="placeholder">Placeholder for coordinates</label>
-        <!-- previously: form__task-name and for: task-name -->
-        <!-- no need for input here -->
+
       </div>
       <div class="form__group ">
         <label for="unmapped"><span class="form__unmapped">unmapped</span></label>
       </div>
       <div class="form_group form__loc-name">
-        <!-- previously: form__status or form__task-name -->
         <label for="loc-name">Title</label>
-        <!-- previously: for: task-name -->
         <input type="text" class="form__control" id="loc-name" />
       </div>
       <div class="form__group form__description text--italic text--medium">
@@ -93,6 +102,7 @@
         <button class="btn btn--danger form__cancel">Cancel</button>
       </div>
     </form>
+
 
 
 

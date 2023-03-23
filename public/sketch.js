@@ -57,9 +57,13 @@ function setup() {
 
 // Grabbing HTML elements
 const addPinModal = document.querySelector(".addPinModal");
+const displayLocationModal = document.querySelector(".locationModal");
+
 const instructionsModal = document.querySelector(".instructionsModal");
 const showInstructionsBtn = document.getElementById("add-a-Pin");
+
 const closePinModalBtn = document.querySelector(".closePinModal");
+const closeLocationModalBtn = document.querySelector(".closeLocationModal");
 const closeInstructionsModalBtn = document.querySelector(
   ".closeInstructionsModal"
 );
@@ -68,15 +72,22 @@ const createLocation = document.querySelector(".form__add");
 const locationName = document.getElementById("loc-name");
 const locationDescription = document.getElementById("loc-description");
 
+const displayedLocationCoordinates = document.getElementById(
+  "coord-placeholder-filled"
+);
+const displayedLocationName = document.getElementById("loc-name-filled");
+const displayedLocationDescription = document.getElementById(
+  "loc-description-filled"
+);
+
 //JS functions
-//probably need to merge the following 2 functions
 function addLocationOnMap() {
-  const position = myMap.pixelToLatLng(mouseX, mouseY);
-  document.getElementById(
-    "placeholder"
-  ).innerHTML = `${position.lat}, ${position.lng}`;
-  togglePinModal();
-}
+      const position = myMap.pixelToLatLng(mouseX, mouseY);
+      document.getElementById(
+        "placeholder"
+      ).innerHTML = `${position.lat}, ${position.lng}`;
+      togglePinModal();
+    }
 
 function createPin() {
   const position = document.getElementById("placeholder").innerHTML.split(",");
@@ -97,19 +108,23 @@ function createPin() {
     );
 
     pins.push(currentPin);
+    displayPinsLineup();
   }
 }
-
-// function displayPin() {
-//   let index = pins.length - 1;
-//   console.log(pins[index]);
-// }
 
 //empties previous form values
 const resetForm = () => {
   locationName.value = "";
   locationDescription.value = "";
 };
+
+function showLocationModal(pin) {
+  console.log(pin);
+  displayLocationModal.classList.remove("hidden");
+  displayedLocationCoordinates.innerHTML = `${pin[2]},${pin[3]}`;
+  displayedLocationName.innerHTML = pin[4];
+  displayedLocationDescription.innerHTML = pin[5];
+}
 
 //Modal Functionalities
 
@@ -143,6 +158,11 @@ showInstructionsBtn.addEventListener("click", (e) => {
 closeInstructionsModalBtn.addEventListener("click", (e) => {
   e.preventDefault();
   instructionsModal.classList.add("hidden");
+});
+
+closeLocationModalBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  displayLocationModal.classList.add("hidden");
 });
 
 cancelLocationAdd.addEventListener("click", (e) => {
@@ -182,12 +202,11 @@ class Pin {
 }
 
 function draw() {
+  canvas.doubleClicked(addLocationOnMap);
   let cols = ceil(canvas.width / pinWidth);
   let rows = ceil(canvas.height / pinHeight);
-  //console.log(pins);
-  //let pins2D = [];
+  //i think the fact that an x,y are properly assigned here is what is causing a delay in pin display
   let pinCounter = 0;
-
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       pins[pinCounter][1] = i * (pinHeight + 15) + 20;
@@ -197,16 +216,40 @@ function draw() {
       }
     }
   }
-  let index = 0;
+
+  if(frameCount % 120==0){
+    displayPinsLineup();
+    
+  }
+  
+
+}
+
+
+function displayPinsLineup(){
   pins.forEach(function (pin) {
-    //button = createButton(pin[6]);
-    //button.addClass("btn--basic");
-    // button.addClass("btn--pin");
-    //button.position(pin[0],pin[1]);
     image(redPin, pin[0], pin[1], pinWidth, pinHeight);
+    fill(0);
+    //text(pin[6].toString(),pin[0]+5,pin[1]+20);
+    stroke(255, 0, 0);
+    noFill();
+    rect(pin[0], pin[1], pinWidth, pinHeight);
   });
 
-  //image(redPin, mouseX, mouseY, pinWidth, pinHeight);
+}
+
+function mousePressed() {
+  pins.forEach(function (pin) {
+    if (
+      mouseX > pin[0] &&
+      mouseX < pin[0] + pinWidth &&
+      mouseY > pin[1] &&
+      mouseY < pin[1] + pinHeight
+    ) {
+      console.log("clicked " + pin[6]);
+      showLocationModal(pin);
+    } 
+  });
 }
 
 // clicked() {

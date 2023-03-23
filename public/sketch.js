@@ -108,7 +108,7 @@ function createPin() {
     );
 
     pins.push(currentPin);
-    displayPinsLineup();
+  
   }
 }
 
@@ -121,9 +121,9 @@ const resetForm = () => {
 function showLocationModal(pin) {
   console.log(pin);
   displayLocationModal.classList.remove("hidden");
-  displayedLocationCoordinates.innerHTML = `${pin[2]},${pin[3]}`;
-  displayedLocationName.innerHTML = pin[4];
-  displayedLocationDescription.innerHTML = pin[5];
+  displayedLocationCoordinates.innerHTML = `${pin.latitude},${pin.longitude}`;
+  displayedLocationName.innerHTML = pin.locName;
+  displayedLocationDescription.innerHTML = pin.locDesc;
 }
 
 //Modal Functionalities
@@ -201,39 +201,102 @@ class Pin {
   }
 }
 
+// function draw() {
+//   canvas.doubleClicked(addLocationOnMap);
+//   let cols = ceil(canvas.width / pinWidth);
+//   let rows = ceil(canvas.height / pinHeight);
+//   console.log('pinsbeginning',pins);
+//   //i think the fact that an x,y are properly assigned here is what is causing a delay in pin display
+//   let pinCounter = 0;
+//   for (let i = 0; i < cols; i++) {
+//     for (let j = 0; j < rows; j++) {
+//       console.log('pinCounter1',pinCounter);
+//       pins[pinCounter][1] = i * (pinHeight + 15) + 20;
+//       pins[pinCounter][0] = j * (pinWidth + 10) + 10;
+//       console.log('x',pins[pinCounter][0],'y',pins[pinCounter][1]);
+//       console.log('pinCounter2',pinCounter);
+//       if (pinCounter = 0) {
+//         console.log('counter 0',pinCounter);
+//         pinCounter += 1;
+//       }
+
+//     }
+//     console.log('pins end of draw',pins);
+//   }
+
+  
+//   displayPinsLineup();
+    
+  
+  
+
+// }
+
 function draw() {
+  // noLoop();
   canvas.doubleClicked(addLocationOnMap);
   let cols = ceil(canvas.width / pinWidth);
   let rows = ceil(canvas.height / pinHeight);
   //i think the fact that an x,y are properly assigned here is what is causing a delay in pin display
-  let pinCounter = 0;
-  for (let i = 0; i < cols; i++) {
-    for (let j = 0; j < rows; j++) {
-      pins[pinCounter][1] = i * (pinHeight + 15) + 20;
-      pins[pinCounter][0] = j * (pinWidth + 10) + 10;
-      if (pinCounter < pins.length - 1) {
-        pinCounter += 1;
-      }
-    }
-  }
-
-  if(frameCount % 120==0){
-    displayPinsLineup();
-    
-  }
+  let pinIndex = 0;
   
+  let currCol=0;
+  let currRow=0;
+  var gridSize = min(canvas.width, canvas.height) / 10;
+  // console.log("Grid size: ",gridSize);
 
+    var numRows = floor(canvas.height / 35);
+    var numCols = floor(canvas.width / (60 * 0.729));
+    console.log('Number of rows: ', numRows,'Number of cols: ',numCols);
+
+    // Calculate the horizontal and vertical spacing between elements
+    var xSpacing = (width / numCols)+10;
+    var ySpacing = (height / numRows)+10;
+    console.log('X spacing: ', xSpacing,'Y spacing: ',ySpacing);
+    // Loop through the list of elements and draw them in the grid
+    for (var i = 0; i < pins.length; i++) {
+      // Calculate the row and column of the current element
+      var row = floor(i / numCols);
+      var col = i % numCols;
+      console.log('Row: ', row,'Col: ',col);
+      // Calculate the x and y position of the element based on its row and column
+      var x = col * xSpacing + (xSpacing - (35 * 0.729)) / 2;
+      var y = row * ySpacing + (ySpacing - 35) / 2;
+      console.log('X position: ', x,'Y position: ',y);
+      pins[i][1] = y;
+      pins[i][0] = x;
+    }
+  // for (let i = 0; i < cols; i++) {
+
+  //   for (let j = 0; j < rows; j++) {
+  //     pins[pinIndex][1] = i * (pinHeight + 15) + 20;
+  //     pins[pinIndex][0] = j * (pinWidth + 10) + 10;
+  //     // console.log('Pin Index: ',pinIndex);
+  //     console.log('X: ',pins[pinIndex][1],'Y: ',pins[pinIndex][0],'Pin number: ',pins[pinIndex][6]);
+  //     if (pinIndex < pins.length - 1) {
+  //       pinIndex += 1;
+  //     }
+  //     // if(pinIndex==pins.length-1){
+  //     //   console.log("INSIDE BREAK 1");
+  //     //   break;
+  //     // }
+  //   }
+  // }
+  displayPinsLineup();
+  
 }
+
 
 
 function displayPinsLineup(){
   pins.forEach(function (pin) {
+    //console.log('pins in display',pins);
     image(redPin, pin[0], pin[1], pinWidth, pinHeight);
+    // console.log('displaying pin', pin[0],'     ',pin[1]);
     fill(0);
-    //text(pin[6].toString(),pin[0]+5,pin[1]+20);
     stroke(255, 0, 0);
     noFill();
-    rect(pin[0], pin[1], pinWidth, pinHeight);
+    //rect(pin[0], pin[1], pinWidth, pinHeight);
   });
 
 }
@@ -246,7 +309,8 @@ function mousePressed() {
       mouseY > pin[1] &&
       mouseY < pin[1] + pinHeight
     ) {
-      console.log("clicked " + pin[6]);
+      console.log("clicked ");
+      console.log('first pin',pin.id);
       showLocationModal(pin);
     } 
   });

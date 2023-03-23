@@ -27,7 +27,7 @@ body {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background:#cadbf5;
+  background:#030d1c;
 }
 
 .header__msg {
@@ -35,6 +35,7 @@ body {
   padding: 1rem 1rem;
   font-weight: 700;
   font-size: x-large;
+  color: white;
 }
 
 /* Buttons */
@@ -67,6 +68,14 @@ body {
 .btn--transparent{
   background-color: transparent;
 }
+/* 
+.btn--pin{
+  background-image: url(redNavFull.png);
+} */
+
+#add-a-Pin{
+  color:white;
+}
 
 .btn--basic:hover{
   cursor:pointer;
@@ -78,6 +87,7 @@ body {
   cursor: pointer;
   background-color: #fcb1b1;
 }
+
 
 #add-a-Pin:hover{
   text-decoration-line: underline;
@@ -105,6 +115,7 @@ body {
   z-index: 10;
 }
 
+
 .close-modal {
   position: absolute;
   top: 1.2rem;
@@ -115,6 +126,7 @@ body {
   border: none;
   background: none;
 }
+
 
 
 /* Insturctions Modal */
@@ -130,6 +142,61 @@ body {
   font-style: italic;
   padding:10rem 0rem 0rem 8rem;
 }
+
+/* Location Modal */
+
+.locationModal{
+  position: absolute;
+  top: 50%;
+  left: 25%;
+  transform: translate(-50%, -50%);
+  width: 35%;
+  height: 40%;
+  overflow-y: scroll;
+  background-color: #E2F0F0;
+  opacity: 0.8; 
+  padding: 2rem;
+  border-radius: 45px;
+  box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+  z-index: 10;
+
+
+}
+
+.locationModal__group{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.locationModal__loc-coordinates{
+  font-size:1.7rem;
+  padding-left:1rem;
+}
+
+.locationModal__label {
+  font-weight: 600;
+  font-size: 1.65rem;
+  font-style: italic;
+  margin-bottom: 0.75rem;
+}
+
+.locationModal__loc-name{
+  font-size: 1.8rem;
+  font-weight: 600;
+  font-style:italic;
+  margin-left: 2rem;
+  margin-top: 3rem;
+  margin-right: 8rem;
+  margin-bottom: 0.75rem;
+}
+.locationModal__description{
+  font-weight:400;
+  font-size: 1.45rem;
+  margin-top:1rem;
+  padding-left:2rem;
+}
+
 /* Form */
 .form__group {
   display: flex;

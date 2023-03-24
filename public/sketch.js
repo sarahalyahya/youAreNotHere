@@ -1,3 +1,7 @@
+//TO-DO:
+// > FIX GRID DISPLAY
+// > FIGURE OUT PIN COLORS 
+
 //Pin Object Array
 let pins = [];
 //Pin CSV Table

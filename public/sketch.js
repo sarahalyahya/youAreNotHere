@@ -1,7 +1,10 @@
 //Pin Object Array
 let pins = [];
-//pin csv table
+//Pin CSV Table
 let allPinsTable;
+//Lat lng based on click
+let position;
+//Image Ratio to maintain correctly scaled image
 let imageRatio = 0.729;
 let pinHeight = 35;
 let pinWidth = pinHeight * imageRatio;
@@ -11,8 +14,8 @@ const key =
 
 // Options for map
 const options = {
-  lat: 0,
   lng: 0,
+  lat: 0,
   zoom: 1.6,
   style: "mapbox://styles/sarahalyahya/clddbjxfo000901lasb1bl3ur",
   pitch: 0,
@@ -23,9 +26,9 @@ const mappa = new Mappa("MapboxGL", key);
 let myMap;
 
 let canvas;
-let phrases;
 
-//preload
+
+//Preload
 function preload() {
   allPinsTable = loadTable(
     "Pins.csv",
@@ -38,97 +41,116 @@ function preload() {
     }
   );
   redPin = loadImage("redNavFull.png");
-  blackPin = loadImage("blackNavFull.png");
+  whitePin = loadImage("whiteNavFull.png");
 }
 
-function setup() {
-  pins = allPinsTable.getArray();
 
-  canvas = createCanvas(1710, 1276);
+
+function setup() {
+  //Convert CSV to Array
+  pins=allPinsTable.getArray();
+  console.log("after loading;",pins);
+  canvas = createCanvas(windowWidth, windowHeight);
 
   myMap = mappa.tileMap(options);
   myMap.overlay(canvas);
 
-  //pins table
-
-  fill(252, 190, 17);
-  stroke(100);
-}
+ }
 
 // Grabbing HTML elements
+//Add Pin Modal
 const addPinModal = document.querySelector(".addPinModal");
 const displayLocationModal = document.querySelector(".locationModal");
-
-const instructionsModal = document.querySelector(".instructionsModal");
-const showInstructionsBtn = document.getElementById("add-a-Pin");
-
-const closePinModalBtn = document.querySelector(".closePinModal");
-const closeLocationModalBtn = document.querySelector(".closeLocationModal");
-const closeInstructionsModalBtn = document.querySelector(
-  ".closeInstructionsModal"
-);
 const cancelLocationAdd = document.querySelector(".form__cancel");
 const createLocation = document.querySelector(".form__add");
+const closePinModalBtn = document.querySelector(".closePinModal");
 const locationName = document.getElementById("loc-name");
 const locationDescription = document.getElementById("loc-description");
 
-const displayedLocationCoordinates = document.getElementById(
-  "coord-placeholder-filled"
-);
+//Instructions Modal
+const instructionsModal = document.querySelector(".instructionsModal");
+const showInstructionsBtn = document.getElementById("add-a-Pin");
+const closeInstructionsModalBtn = document.querySelector(".closeInstructionsModal");
+
+//Display Location Modal 
+const closeLocationModalBtn = document.querySelector(".closeLocationModal");
+const displayedLocationCoordinates = document.getElementById("coord-placeholder-filled");
 const displayedLocationName = document.getElementById("loc-name-filled");
-const displayedLocationDescription = document.getElementById(
-  "loc-description-filled"
-);
+const displayedLocationDescription = document.getElementById("loc-description-filled");
+
+
 
 //JS functions
+
+//Gets latitude and longitude based on mouse click location and injects it into html + opens add pin modal
 function addLocationOnMap() {
-      const position = myMap.pixelToLatLng(mouseX, mouseY);
-      document.getElementById(
-        "placeholder"
-      ).innerHTML = `${position.lat}, ${position.lng}`;
+      position = myMap.pixelToLatLng(mouseX, mouseY);
+      document.getElementById("placeholder").innerHTML = `${position.lng}, ${position.lat}`;
       togglePinModal();
     }
 
+//Creates a pin object and returns it
 function createPin() {
-  const position = document.getElementById("placeholder").innerHTML.split(",");
+  //Gets inputs from html values
+  //const positionDisplayed = document.getElementById("placeholder").innerHTML.split(","); *i THINK i don't need this*
   const locationDescriptionEdited = locationDescription.value.trim();
   const locationNameEdited = locationName.value.trim();
 
+  //User must fill in at least one of the inputs 
   if (locationDescriptionEdited.length == 0 && locationNameEdited.length == 0) {
     alert("You must enter either a location name or description");
   } else {
+    //Create pin object
     let currentPin = new Pin(
       0,
       0,
-      position[0],
-      position[1],
+      position.lng,
+      position.lat,
       locationNameEdited,
       locationDescriptionEdited,
-      pins.length + 1
+      myMap.getZoom(),
+      pins.length + 1,
     );
-
-    pins.push(currentPin);
+    return currentPin
   
   }
 }
 
-//empties previous form values
+//Empties previous input form values
 const resetForm = () => {
   locationName.value = "";
   locationDescription.value = "";
 };
 
-function showLocationModal(pin) {
-  console.log(pin);
-  displayLocationModal.classList.remove("hidden");
-  displayedLocationCoordinates.innerHTML = `${pin.latitude},${pin.longitude}`;
-  displayedLocationName.innerHTML = pin.locName;
-  displayedLocationDescription.innerHTML = pin.locDesc;
+//Displays a pin for each location added. My pins are in white for guidance & backstory
+function displayPinsLineup(){
+  pins.forEach(function (pin) {
+    if(pin[7] == 1){
+      image(redPin, pin[0], pin[1], pinWidth, pinHeight);
+    }else{
+      image(whitePin, pin[0], pin[1], pinWidth, pinHeight);
+    }
+    
+  });
+
 }
+
+
+
 
 //Modal Functionalities
 
-//display and close pin modal
+//Displays added location modal 
+function showLocationModal(pin) {
+  //takes object values and displays them in the HTML element 
+  displayedLocationCoordinates.innerHTML = `${pin[2]},${pin[3]}`;
+  displayedLocationName.innerHTML = pin[4];
+  displayedLocationDescription.innerHTML = pin[5];
+  displayLocationModal.classList.remove("hidden");
+
+}
+
+//Display and close pin modal
 const togglePinModal = (action) => {
   if (action === "closeModal") {
     addPinModal.classList.add("hidden");
@@ -137,171 +159,147 @@ const togglePinModal = (action) => {
   }
 };
 
-//calls all needed functions to close modal
+//Calls all needed functions to close the pin modal
 const closePinModalHandler = (e) => {
-  //default brings back map to Tantura home
   e.preventDefault();
   resetForm();
   togglePinModal("closeModal");
 };
 
 //Event Listeners
+
+//Closing add pin modal
 closePinModalBtn.addEventListener("click", (e) => {
   closePinModalHandler(e);
 });
 
+//Shows instruction modal
 showInstructionsBtn.addEventListener("click", (e) => {
   e.preventDefault();
   instructionsModal.classList.remove("hidden");
 });
 
+//Closes instructions modal
 closeInstructionsModalBtn.addEventListener("click", (e) => {
   e.preventDefault();
   instructionsModal.classList.add("hidden");
 });
 
+//Closes location modal
 closeLocationModalBtn.addEventListener("click", (e) => {
   e.preventDefault();
+  myMap.map.flyTo({
+    center: [
+       0,0
+        
+      ],
+    zoom: 1.6
+  });
   displayLocationModal.classList.add("hidden");
+
 });
 
+//Cancels adding location
 cancelLocationAdd.addEventListener("click", (e) => {
   closePinModalHandler(e);
+  myMap.map.flyTo({
+    center: [
+       0,0
+        
+      ],
+    zoom: 1.6
+  });
 });
 
+//Creates a location by pushing the object into the csv file, and object array to the pins array 
 createLocation.addEventListener("click", (e) => {
   currentPinsArrayLength = pins.length;
   e.preventDefault();
-  createPin();
-  pin = pins[pins.length - 1];
+  pin = createPin();
   function forPostReq(pin) {
     let thisPin = pin;
-    console.log("i am here");
     $.post("/ajax_response", thisPin, function (data, status) {
       alert("Data: " + data + "\nStatus:" + status);
     });
   }
   forPostReq(pin);
+  //Because i've converted the CSV table to an array, i must convert the pin object to a pin array before i push it
+  const myArray = Object.values(pin);
+  console.log("pin Array:",myArray);
+  pins.push(myArray);
 
   if (pins.length > currentPinsArrayLength) {
     closePinModalHandler(e);
   }
+  myMap.map.flyTo({
+    center: [
+       0,0
+        
+      ],
+    zoom: 1.6
+  });
 });
 
 //Pin Class
 class Pin {
-  constructor(_x, _y, lat, lng, name, desc, id) {
+  constructor(_x, _y, lng, lat, name, desc, _zoom, id) {
     this.x = _x;
     this.y = _y;
-    this.latitude = lat;
     this.longitude = lng;
+    this.latitude = lat;
     this.locName = name;
     this.locDesc = desc;
+    this.zoom = _zoom;
     this.id = id;
   }
 }
 
-// function draw() {
-//   canvas.doubleClicked(addLocationOnMap);
-//   let cols = ceil(canvas.width / pinWidth);
-//   let rows = ceil(canvas.height / pinHeight);
-//   console.log('pinsbeginning',pins);
-//   //i think the fact that an x,y are properly assigned here is what is causing a delay in pin display
-//   let pinCounter = 0;
-//   for (let i = 0; i < cols; i++) {
-//     for (let j = 0; j < rows; j++) {
-//       console.log('pinCounter1',pinCounter);
-//       pins[pinCounter][1] = i * (pinHeight + 15) + 20;
-//       pins[pinCounter][0] = j * (pinWidth + 10) + 10;
-//       console.log('x',pins[pinCounter][0],'y',pins[pinCounter][1]);
-//       console.log('pinCounter2',pinCounter);
-//       if (pinCounter = 0) {
-//         console.log('counter 0',pinCounter);
-//         pinCounter += 1;
-//       }
 
-//     }
-//     console.log('pins end of draw',pins);
-//   }
 
-  
-//   displayPinsLineup();
-    
-  
-  
 
-// }
 
 function draw() {
-  // noLoop();
   canvas.doubleClicked(addLocationOnMap);
-  let cols = ceil(canvas.width / pinWidth);
-  let rows = ceil(canvas.height / pinHeight);
-  //i think the fact that an x,y are properly assigned here is what is causing a delay in pin display
-  let pinIndex = 0;
-  
-  let currCol=0;
-  let currRow=0;
-  var gridSize = min(canvas.width, canvas.height) / 10;
-  // console.log("Grid size: ",gridSize);
 
-    var numRows = floor(canvas.height / 35);
-    var numCols = floor(canvas.width / (60 * 0.729));
-    console.log('Number of rows: ', numRows,'Number of cols: ',numCols);
+  
+  //OVERFLOW NEEDS TO BE FIGURED OUT
+  
+    //Calculating number of row and cols based on canvas and pin size 
+    var numRows = floor(canvas.height / pinHeight);
+    var numCols = floor(canvas.width / pinWidth)-25;
 
     // Calculate the horizontal and vertical spacing between elements
-    var xSpacing = (width / numCols)+10;
-    var ySpacing = (height / numRows)+10;
-    console.log('X spacing: ', xSpacing,'Y spacing: ',ySpacing);
-    // Loop through the list of elements and draw them in the grid
+    var xSpacing = (canvas.width / numCols)+5;
+    var ySpacing = (canvas.height / numRows)+5;
+   
+    // Loop through pins array and give them the x,y values needed later for displaying the pins 
     for (var i = 0; i < pins.length; i++) {
-      // Calculate the row and column of the current element
-      var row = floor(i / numCols);
-      var col = i % numCols;
-      console.log('Row: ', row,'Col: ',col);
-      // Calculate the x and y position of the element based on its row and column
-      var x = col * xSpacing + (xSpacing - (35 * 0.729)) / 2;
-      var y = row * ySpacing + (ySpacing - 35) / 2;
-      console.log('X position: ', x,'Y position: ',y);
-      pins[i][1] = y;
-      pins[i][0] = x;
-    }
-  // for (let i = 0; i < cols; i++) {
 
-  //   for (let j = 0; j < rows; j++) {
-  //     pins[pinIndex][1] = i * (pinHeight + 15) + 20;
-  //     pins[pinIndex][0] = j * (pinWidth + 10) + 10;
-  //     // console.log('Pin Index: ',pinIndex);
-  //     console.log('X: ',pins[pinIndex][1],'Y: ',pins[pinIndex][0],'Pin number: ',pins[pinIndex][6]);
-  //     if (pinIndex < pins.length - 1) {
-  //       pinIndex += 1;
-  //     }
-  //     // if(pinIndex==pins.length-1){
-  //     //   console.log("INSIDE BREAK 1");
-  //     //   break;
-  //     // }
-  //   }
-  // }
+      // Calculate the row and column of the current element
+      //based on columns because "number of columns" is what makes up a row
+      var row = floor(i / numCols);
+
+      //Since i/numCols is the row, the remainder gives us the specific cell of the row the object is in (so the column)
+      var col = i % numCols;
+
+      // Calculate the x and y position of the pin and center it with taking spacing into account 
+      var x = col * xSpacing + (xSpacing - (pinWidth)) / 2;
+      var y = row * ySpacing + (ySpacing - pinHeight) / 2;
+
+      //adding the x,y
+      pins[i][0] = x;
+      pins[i][1] = y;
+      
+    }
+
   displayPinsLineup();
   
 }
 
 
 
-function displayPinsLineup(){
-  pins.forEach(function (pin) {
-    //console.log('pins in display',pins);
-    image(redPin, pin[0], pin[1], pinWidth, pinHeight);
-    // console.log('displaying pin', pin[0],'     ',pin[1]);
-    fill(0);
-    stroke(255, 0, 0);
-    noFill();
-    //rect(pin[0], pin[1], pinWidth, pinHeight);
-  });
-
-}
-
 function mousePressed() {
+  //Looping over each pin to check whether a specific location modal needs to display
   pins.forEach(function (pin) {
     if (
       mouseX > pin[0] &&
@@ -309,15 +307,20 @@ function mousePressed() {
       mouseY > pin[1] &&
       mouseY < pin[1] + pinHeight
     ) {
-      console.log("clicked ");
-      console.log('first pin',pin.id);
+      
+      myMap.map.flyTo({
+        center: [
+           pin[2],pin[3]
+            
+          ],
+        zoom: pin[6]
+      });
+      
+     
       showLocationModal(pin);
+
+    
     } 
   });
 }
 
-// clicked() {
-//   if (dist(mouseX, mouseY, this.x, this.y) < this.size) {
-//     background(255, 0, 0);
-//   }
-// }

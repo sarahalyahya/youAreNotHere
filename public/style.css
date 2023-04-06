@@ -21,6 +21,7 @@ body {
 }
 
 /* Header */
+
 .header {
 
   display: flex;
@@ -34,15 +35,17 @@ body {
   
   padding: 1rem 1rem;
   font-weight: 700;
-  font-size: x-large;
+  font-size: large;
   color: white;
 }
+
+
 
 /* Buttons */
 .btn {
   font-family: inherit;
   border: 0;
-  padding: 1.5rem 2rem;
+  padding: 1rem 1.5rem;
   border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
@@ -98,7 +101,12 @@ body {
   display: none;
 }
 
-
+/* modal location for add location size */
+/* smaller pins */
+/* animation speed */
+/* starting from the earth */
+/* closing all modals when opening one */
+/* calligraphy */
 .modal {
   position: absolute;
   top: 50%;
@@ -127,20 +135,44 @@ body {
   background: none;
 }
 
+/* Add a Pin Modal */
+.addPinModal{
+  left:25%;
+  width: 44%;
+  height: 60%;
+}
+
 
 
 /* Insturctions Modal */
-.instructions_title{
+
+.instructionsModal{
+  width: 35%;
+  height: 40%;
+  font-size: 1.5rem;
+}
+/* .instructions_title{
   font-weight: 700;
   font-size: 2.7rem;
   margin-bottom: 1rem;
   padding-left: 1rem;
-}
+} */
+
+
 .instructions_text{
-  font-weight:500;
-  font-size:2.8rem;
+  line-height: 1.6;
+  font-size:2rem;
+  font-weight: 600;
   font-style: italic;
-  padding:10rem 0rem 0rem 8rem;
+  padding:7rem 0rem 0rem 7rem;
+}
+
+.instructionsNote{
+  font-size:1.5rem;
+  font-style:italic;
+  text-align: center;
+  margin-top: 2rem;
+  padding: 0rem 0rem 0rem 1rem;
 }
 
 /* Location Modal */
@@ -195,6 +227,7 @@ body {
   font-size: 1.45rem;
   margin-top:1rem;
   padding-left:2rem;
+  padding-right: 1rem;
 }
 
 /* Form */
@@ -221,16 +254,16 @@ body {
 
 .form_title{
   font-weight: 700;
-  font-size: 2.7rem;
-  margin-bottom: 1rem;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
   padding-left: 1rem;
 }
 .form label {
   font-weight: 600;
-  font-size: 1.65rem;
+  font-size: 1.55rem;
   font-style: italic;
-  margin-bottom: 0.75rem;
   margin-right:0.65rem;
+  margin-bottom: 0.5rem;
 }
 
 .form input,
@@ -241,6 +274,8 @@ body {
   border-radius: 3px;
   padding: 0.35rem 0.8rem;
 }
+
+
 
 .form__loc-name {
   margin-left: 11rem;
@@ -255,6 +290,11 @@ body {
 
 .form__unmapped{
   background-color: #ed51518a;
+  margin-left:1rem;
+
+}
+.form__remapped{
+  background-color: #51ed978a;
   margin-left:1rem;
 
 }
@@ -294,3 +334,6 @@ body {
   padding: 0rem 6rem;
   margin: 0 5rem;
 }
+
+
+

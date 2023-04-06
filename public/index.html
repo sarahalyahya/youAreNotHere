@@ -35,7 +35,7 @@
       <span>YOU ARE NOT HERE</span>
     </div>
     <button class="btn btn--transparent header__msg" id="add-a-Pin">
-      ADD A PIN
+      CONTRIBUTING A PIN
     </button>
   </header>
 
@@ -46,11 +46,12 @@
     <button class="close-modal closeInstructionsModal">&times;</button>
     <ol type="I" class="instructions_text">
       <li>Think of a place you know that is not well-represented on the map</li>
-      <li>Navigate to this place</li>
       <li>Drop a pin by double-clicking on the map</li>
-      <li>Explore other unmapped locations</li>
-      <li>Invite your friends</li>
+      <!-- <li>Drop a pin by double-clicking on the map</li>
+      <li>Explore other unmapped locations</li> -->
+      <!-- <li>Invite your friends</li> -->
     </ol>
+    <span class="instructionsNote">*The red pins tell my story, the white will tell yours and everyone else's...</span>
   </div>
 
   <!-- LOCATION DISPLAY MODAL -->
@@ -60,7 +61,7 @@
     <div class="locationModal__group locationModal__loc-coordinates"><label class="locationModal__label"
         id="coord-placeholder-filled" for="loc-coordinates">Placeholder for coordinates</label></div>
     <div class="locationModal__group"><label class="locationModal__label" for="unmapped"><span
-          class="form__unmapped">unmapped</span></label></div>
+          class="form__remapped">remapped</span></label></div>
     <div class="locationModal_group locationModal__loc-name"><label id="loc-name-filled" for="loc-name">Placeholder for Title</label></div>
     <div class="locationModal_group locationModal__description"><span id="loc-description-filled">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque accumsan consequat nulla ac finibus. Integer sit amet commodo risus. Vivamus neque turpis, gravida sed condimentum eu, eleifend in arcu. Ut lacinia nibh eu libero condimentum tincidunt. Nullam blandit augue ac metus fringilla, quis condimentum ex fringilla. Ut aliquam quam sed dui consequat, vel cursus diam hendrerit. Orci varius natoque penatibus.
 
@@ -92,7 +93,7 @@
         <input type="text" class="form__control" id="loc-name" />
       </div>
       <div class="form__group form__description text--italic text--medium">
-        <label for="location-description">
+        <label class= "form__descLabel"for="location-description">
           What is this place? Why isn’t it on the map? Write a sentence, poem, story, or whatever you want.
         </label>
         <textarea class="form__control" id="loc-description" rows="7" cols="65">

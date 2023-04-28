@@ -1,0 +1,17 @@
+
+#!/bin/bash
+
+function cleanup {
+  kill $node_pid
+}
+trap cleanup EXIT INT
+# change this path to where your folder is!!!
+cd /Users/commlab04/desktop/YOUARENOTHERE/youAreNotHere
+# need full path to node, you can do "which node" in terminal to find out the full path
+# change to the name of your node app (if not server.js)
+/usr/local/bin/node server.js &
+sleep 2
+# change to the name of your node app (if not server.js)
+node_pid=$(ps aux | grep server.js | awk '{print $2}')
+# need the full location of the chrome app inside Chrome.app
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --kiosk "http://localhost:3000/"
